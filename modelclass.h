@@ -34,10 +34,14 @@ public:
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
+	void SetVertexCount(int x);
+	void SetIndexCount(int x);
+
 	int GetIndexCount();
 
+
 private:
-	bool InitializeBuffers(ID3D11Device*);
+	bool InitializeBuffers(ID3D11Device*) ;
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
 

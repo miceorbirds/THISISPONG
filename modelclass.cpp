@@ -1,6 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////
-// Filename: modelclass.cpp
-////////////////////////////////////////////////////////////////////////////////
 #include "modelclass.h"
 
 
@@ -8,6 +5,8 @@ ModelClass::ModelClass()
 {
 	m_vertexBuffer = 0;
 	m_indexBuffer = 0;
+	m_vertexCount = 0;
+	m_indexCount = 0;
 }
 
 
@@ -24,7 +23,8 @@ ModelClass::~ModelClass()
 bool ModelClass::Initialize(ID3D11Device* device)
 {
 	bool result;
-
+	this->SetIndexCount(3);
+	this->SetVertexCount(3);
 
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
@@ -54,6 +54,15 @@ void ModelClass::Render(ID3D11DeviceContext* deviceContext)
 	return;
 }
 
+void ModelClass::SetVertexCount(int x)
+{
+	m_vertexCount = x;
+}
+
+void ModelClass::SetIndexCount(int x)
+{
+	m_indexCount = x;
+}
 
 int ModelClass::GetIndexCount()
 {
@@ -71,10 +80,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 
 	// Set the number of vertices in the vertex array.
-	m_vertexCount = 3;
+	//m_vertexCount = 3;
 
 	// Set the number of indices in the index array.
-	m_indexCount = 3;
+	//m_indexCount = 3;
 
 	// Create the vertex array.
 	vertices = new VertexType[m_vertexCount];
