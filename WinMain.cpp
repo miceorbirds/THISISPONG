@@ -6,7 +6,7 @@ int WINAPI WinMain(
 	PSTR pScmdline,
 	int iCmdshow)
 {
-	SystemClass* System;
+	SystemClass* System = nullptr;
 	bool result;
 
 	// Create the system object.
