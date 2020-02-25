@@ -26,7 +26,7 @@ int WINAPI WinMain(
 	// Shutdown and release the system object.
 	System->Shutdown();
 	delete System;
-	System = 0;
+	System = nullptr;
 
 	return 0;
 }
