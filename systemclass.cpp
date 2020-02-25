@@ -3,8 +3,8 @@
 
 SystemClass::SystemClass()
 {
-	m_Input = 0;
-	m_Graphics = 0;
+	m_Input = nullptr;
+	m_Graphics = nullptr;
 }
 
 
@@ -65,14 +65,14 @@ void SystemClass::Shutdown()
 	{
 		m_Graphics->Shutdown();
 		delete m_Graphics;
-		m_Graphics = 0;
+		m_Graphics = nullptr;
 	}
 
 	// Release the input object.
 	if (m_Input)
 	{
 		delete m_Input;
-		m_Input = 0;
+		m_Input = nullptr;
 	}
 
 	// Shutdown the window.
@@ -195,11 +195,11 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = m_hinstance;
-	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
 	wc.hIconSm = wc.hIcon;
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wc.lpszMenuName = NULL;
+	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = m_applicationName;
 	wc.cbSize = sizeof(WNDCLASSEX);
 
@@ -210,12 +210,12 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-		screenWidth = 800;
-		screenHeight = 600;
+	screenWidth = 800;
+	screenHeight = 800;
 
-		// Place the window in the middle of the screen.
-		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-		posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
+	// Place the window in the middle of the screen.
+	posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
+	posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
 
 
 	// Create the window with the screen settings and get the handle to it.
@@ -226,8 +226,8 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
 		posX, posY,
 		screenWidth, screenHeight,
-		NULL, NULL,
-		m_hinstance, NULL);
+		nullptr, nullptr,
+		m_hinstance, nullptr);
 
 	// Bring the window up on the screen and set it as main focus.
 	ShowWindow(m_hwnd, SW_SHOW);
