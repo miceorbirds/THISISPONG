@@ -18,17 +18,13 @@ SystemClass::~SystemClass()
 }
 
 
-bool SystemClass::Initialize()
+bool SystemClass::Initialize(int width, int height)
 {
-	int screenWidth, screenHeight;
 	bool result;
 
-	// Initialize the width and height of the screen to zero before sending the variables into the function.
-	screenWidth = 0;
-	screenHeight = 0;
 
 	// Initialize the windows api.
-	InitializeWindows(screenWidth, screenHeight);
+	InitializeWindows(width, height);
 
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	m_Input = new InputClass;
@@ -48,7 +44,7 @@ bool SystemClass::Initialize()
 	}
 
 	// Initialize the graphics object.
-	result = m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd);
+	result = m_Graphics->Initialize(width, height, m_hwnd);
 	if (!result)
 	{
 		return false;
@@ -126,7 +122,6 @@ bool SystemClass::Frame()
 {
 	bool result;
 
-
 	// Check if the user pressed escape and wants to exit the application.
 	if (m_Input->IsKeyDown(VK_ESCAPE))
 	{
@@ -175,10 +170,7 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 
 void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 {
-	WNDCLASSEX wc;
-	DEVMODE dmScreenSettings;
-	int posX, posY;
-
+	WNDCLASSEX wc = {};
 
 	// Get an external pointer to this object.	
 	ApplicationHandle = this;
@@ -190,15 +182,15 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	m_applicationName = L"PONG";
 
 	// Setup the windows class with default settings.
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+	wc.style = CS_OWNDC;
 	wc.lpfnWndProc = WndProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = m_hinstance;
 	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
 	wc.hIconSm = wc.hIcon;
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wc.hCursor = nullptr;
+	wc.hbrBackground = nullptr;
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = m_applicationName;
 	wc.cbSize = sizeof(WNDCLASSEX);
@@ -206,26 +198,24 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	// Register the window class.
 	RegisterClassEx(&wc);
 
-	// Determine the resolution of the clients desktop screen.
-	screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	screenHeight = GetSystemMetrics(SM_CYSCREEN);
-
 	screenWidth = 800;
 	screenHeight = 800;
-
-	// Place the window in the middle of the screen.
-	posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-	posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
-
+	// calculate window size based on desired client region size
+	RECT wr;
+	wr.left = 100;
+	wr.right = screenWidth + wr.left;
+	wr.top = 100;
+	wr.bottom = screenHeight + wr.top;
+	AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
 
 	// Create the window with the screen settings and get the handle to it.
 	m_hwnd = CreateWindowEx(
 		WS_EX_APPWINDOW,
 		m_applicationName,
 		m_applicationName,
-		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-		posX, posY,
-		screenWidth, screenHeight,
+		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+		CW_USEDEFAULT, CW_USEDEFAULT,
+		wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr,
 		m_hinstance, nullptr);
 
@@ -233,9 +223,6 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	ShowWindow(m_hwnd, SW_SHOW);
 	SetForegroundWindow(m_hwnd);
 	SetFocus(m_hwnd);
-
-	// Hide the mouse cursor.
-	ShowCursor(true);
 
 	return;
 }

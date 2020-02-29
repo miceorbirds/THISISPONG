@@ -16,7 +16,7 @@ public:
 	SystemClass(const SystemClass&);
 	~SystemClass();
 
-	bool Initialize();
+	bool Initialize(int screenWidth, int screenHeight);
 	void Shutdown();
 	void Run();
 
@@ -35,6 +35,7 @@ private:
 	InputClass* m_Input;
 	GraphicsClass* m_Graphics;
 };
+
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
