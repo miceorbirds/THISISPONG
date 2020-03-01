@@ -59,9 +59,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
+	WCHAR* pic = const_cast<WCHAR*>(L"stone.tga");
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "stone.tga");
+	result = m_Model->Initialize(m_Direct3D->GetDevice(), pic);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);

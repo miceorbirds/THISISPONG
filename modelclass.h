@@ -2,7 +2,6 @@
 #define _MODELCLASS_H_
 
 
-
 #include <d3d11.h>
 #include <directxmath.h>
 using namespace DirectX;
@@ -24,13 +23,13 @@ public:
 	ModelClass(const ModelClass&);
 	~ModelClass();
 
-	bool Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, WCHAR* textureFilename);
-
+	bool Initialize(ID3D11Device* device, WCHAR* textureFilename);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
 	void SetVertexCount(int x);
 	void SetIndexCount(int x);
+
 	ID3D11ShaderResourceView* GetTexture();
 
 	int GetIndexCount();
@@ -40,7 +39,7 @@ private:
 	bool InitializeBuffers(ID3D11Device*) ;
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
-	bool LoadTexture(ID3D11Device*, ID3D11DeviceContext*, WCHAR*);
+	bool LoadTexture(ID3D11Device*, WCHAR*);
 	void ReleaseTexture();
 
 private:

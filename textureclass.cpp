@@ -23,7 +23,7 @@ bool TextureClass::Initialize(ID3D11Device* device, WCHAR* textureFilename)
 	//hResult = D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &m_texture, NULL);
 	//if (FAILED(hResult))
 	auto image = std::make_unique<ScratchImage>();
-	hResult = LoadFromTGAFile(textureFilename, NULL);
+	hResult = LoadFromTGAFile(textureFilename, NULL, *image);
 	if (FAILED(hResult))
 	{
 		return false;
