@@ -1,6 +1,4 @@
 #include "textureclass.h"
-#include "DirectXTex.h"
-#include "DirectXTex.inl"
 
 TextureClass::TextureClass()
 {
