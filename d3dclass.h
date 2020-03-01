@@ -18,6 +18,7 @@
 //////////////
 #include <d3d11.h>
 #include <directxmath.h>
+#include "DirectXTex.h"
 using namespace DirectX;
 
 

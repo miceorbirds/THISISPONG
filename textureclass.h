@@ -3,8 +3,9 @@
 #define _TEXTURECLASS_H_
 
 
-#include <d3d11.h>
 #include <stdio.h>
+#include <d3d11.h>
+#include "DirectXTex.h"
 
 class TextureClass
 {
