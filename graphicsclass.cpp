@@ -59,7 +59,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	WCHAR* pic = const_cast<WCHAR*>(L"stone.tga");
+	WCHAR* pic = const_cast<WCHAR*>(L"grass.tga");
 
 	// Initialize the model object.
 	result = m_Model->Initialize(m_Direct3D->GetDevice(), pic);
@@ -76,28 +76,28 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Initialize the color shader object.
+	// Initialize the texture shader object.
 	result = m_TextureShader->Initialize(m_Direct3D->GetDevice(), hwnd);
 	if (!result)
 	{
-		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
+		MessageBox(hwnd, L"Could not initialize the texture shader object.", L"Error", MB_OK);
 		return false;
 	}
 
 	// Create the color shader object.
-	m_ColorShader = new ColorShaderClass;
-	if (!m_ColorShader)
-	{
-		return false;
-	}
+	// m_ColorShader = new ColorShaderClass;
+	// if (!m_ColorShader)
+	// {
+	//	return false;
+	// }
 
 	// Initialize the color shader object.
-	result = m_ColorShader->Initialize(m_Direct3D->GetDevice(), hwnd);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
-		return false;
-	}
+	// result = m_ColorShader->Initialize(m_Direct3D->GetDevice(), hwnd);
+	// if (!result)
+	// {
+	// 	MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
+	// 	return false;
+	// }
 
 	return true;
 }
@@ -113,12 +113,12 @@ void GraphicsClass::Shutdown()
 		m_TextureShader = 0;
 	}
 	// Release the color shader object.
-	if (m_ColorShader)
-	{
-		m_ColorShader->Shutdown();
-		delete m_ColorShader;
-		m_ColorShader = 0;
-	}
+	// if (m_ColorShader)
+	// {
+	//	m_ColorShader->Shutdown();
+	//	delete m_ColorShader;
+	//	m_ColorShader = 0;
+	// }
 
 	// Release the model object.
 	if (m_Model)
@@ -182,11 +182,11 @@ bool GraphicsClass::Render()
 	m_Model->Render(m_Direct3D->GetDeviceContext());
 
 	// Render the model using the color shader.
-	result = m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
-	if (!result)
-	{
-		return false;
-	}
+	// result = m_ColorShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	// if (!result)
+	// {
+	// 	return false;
+	// }
 	// Render the model using the texture shader.
 	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture());
 	if (!result)

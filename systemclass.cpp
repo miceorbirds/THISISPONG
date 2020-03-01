@@ -230,8 +230,6 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 
 void SystemClass::ShutdownWindows()
 {
-	// Show the mouse cursor.
-	ShowCursor(true);
 
 
 	// Remove the window.

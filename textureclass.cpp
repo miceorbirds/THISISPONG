@@ -20,15 +20,22 @@ TextureClass::~TextureClass()
 bool TextureClass::Initialize(ID3D11Device* device, WCHAR* textureFilename)
 {
 	HRESULT hResult;
+	HRESULT hr;
 	//hResult = D3DX11CreateShaderResourceViewFromFile(device, filename, NULL, NULL, &m_texture, NULL);
-	//if (FAILED(hResult))
 	auto image = std::make_unique<ScratchImage>();
-	hResult = LoadFromTGAFile(textureFilename, NULL, *image);
+
+	hResult = LoadFromTGAFile(textureFilename, nullptr, *image);
 	if (FAILED(hResult))
 	{
 		return false;
 	}
 
+	ID3D11Resource* pResource = nullptr;
+	hr = CreateTexture(device, image->GetImages(), image->GetImageCount(), image->GetMetadata(), &pResource);
+	if (FAILED(hr))
+	{
+		return false;
+	}
 
 	return true;
 }

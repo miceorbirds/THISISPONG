@@ -1,5 +1,5 @@
 #include "modelclass.h"
-
+#include <iostream>
 
 ModelClass::ModelClass()
 {
@@ -31,6 +31,7 @@ bool ModelClass::Initialize(ID3D11Device* device, WCHAR* textureFilename)
 	result = InitializeBuffers(device);
 	if (!result)
 	{
+		std::cout << "Rip Initialize Buffers" << std::endl;
 		return false;
 	}
 
@@ -38,6 +39,7 @@ bool ModelClass::Initialize(ID3D11Device* device, WCHAR* textureFilename)
 	result = LoadTexture(device, textureFilename);
 	if (!result)
 	{
+		std::cout << "Rip LoadTexture" << std::endl;
 		return false;
 	}
 
