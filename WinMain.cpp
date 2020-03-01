@@ -1,4 +1,5 @@
 #include "systemclass.h"
+#include <iostream>
 
 int WINAPI WinMain(
 	HINSTANCE hInstance,
@@ -6,9 +7,17 @@ int WINAPI WinMain(
 	PSTR pScmdline,
 	int iCmdshow)
 {
+
+	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
+	if (FAILED(hr))
+		// error
+	{
+		std::cout << "Hello" << std::endl;
+	}
+
+	// I. создаём объект окна и инициализируем его в 0
 	SystemClass* System = nullptr;
 	bool result;
-
 	// Create the window class (like lil system).
 	System = new SystemClass;
 	if (!System)
@@ -16,15 +25,17 @@ int WINAPI WinMain(
 		return 0;
 	}
 
-	// Initialize and run the window
+
+	// II. Запускаем процесс создания окна с шириной и высотой
 	result = System->Initialize(800,800);
 	if (result)
 	{
-		// if everything is OK, show begin
+		// III. if everything is OK, show begin
 		System->Run();
 	}
 
-	// Shutdown and release the window
+
+	// IV. Shutdown and release the window
 	System->Shutdown();
 	delete System;
 	System = nullptr;
