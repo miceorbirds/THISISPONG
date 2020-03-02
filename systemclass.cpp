@@ -30,13 +30,12 @@ bool SystemClass::Initialize()
 	// Initialize the windows api.
 	InitializeWindows(screenWidth, screenHeight);
 
-	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
+	// Create the input object. This object will be used to handle reading the keyboard input from the user.
 	m_Input = new InputClass;
 	if (!m_Input)
 	{
 		return false;
 	}
-
 	// Initialize the input object.
 	m_Input->Initialize();
 
@@ -232,9 +231,6 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	ShowWindow(m_hwnd, SW_SHOW);
 	SetForegroundWindow(m_hwnd);
 	SetFocus(m_hwnd);
-
-	// Hide the mouse cursor.
-	ShowCursor(true);
 
 	return;
 }

@@ -60,7 +60,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	wchar_t* modelFile = const_cast<wchar_t*>(L"cube.txt");
+	wchar_t* modelFile = const_cast<wchar_t*>(L"triangle.txt");
 	
 	// Initialize the model object.
 	result = m_Model->Initialize(m_Direct3D->GetDevice(), modelFile);
@@ -69,6 +69,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
+
+
 
 	// Create the color shader object.
 	m_ColorShader = new ColorShaderClass;
@@ -168,7 +170,7 @@ bool GraphicsClass::Render(float rotation)
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
 	// Rotate the world matrix by the rotation value so that the triangle will spin.
-	worldMatrix = XMMatrixRotationY(rotation);
+	//worldMatrix = XMMatrixRotationY(rotation);
 
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.

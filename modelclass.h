@@ -32,6 +32,11 @@ private:
 		float r, g, b, a;
 	};
 
+	struct ConstantBufferType
+	{
+		XMMATRIX transform;
+	};
+
 public:
 	ModelClass();
 	ModelClass(const ModelClass&);
@@ -52,7 +57,7 @@ private:
 	void ReleaseModel();
 
 private:
-	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer;
+	ID3D11Buffer* m_vertexBuffer, * m_indexBuffer, *m_constantBuffer;
 	int m_vertexCount, m_indexCount;
 	ModelType* m_model;
 };

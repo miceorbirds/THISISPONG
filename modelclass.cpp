@@ -72,9 +72,10 @@ int ModelClass::GetIndexCount()
 bool ModelClass::InitializeBuffers(ID3D11Device* device)
 {
 	VertexType* vertices;
+	ConstantBufferType matrixTransform;
 	unsigned long* indices;
-	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc, constantBufferDesc;
+	D3D11_SUBRESOURCE_DATA vertexData, indexData, constantData;
 	HRESULT result;
 	int i;
 
@@ -91,6 +92,16 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	{
 		return false;
 	}
+
+	matrixTransform =
+	{
+		{
+			XMMatrixTranspose(
+				XMMatrixScaling(2.0f,1.0f,1.0f) *
+				XMMatrixTranslation(0.15f,0.0f,0.0f)
+			)
+		}
+	};
 
 	// Load the vertex array with data.
 	for (i = 0; i < m_vertexCount; ++i)
@@ -125,7 +136,6 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.StructureByteStride = 0;
-
 	// Give the subresource structure a pointer to the vertex data.
 	vertexData.pSysMem = vertices;
 	vertexData.SysMemPitch = 0;
@@ -158,6 +168,24 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		return false;
 	}
 
+	// Set up the description of the constant buffer
+	constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	constantBufferDesc.MiscFlags = 0u;
+	constantBufferDesc.ByteWidth = sizeof(matrixTransform);
+	constantBufferDesc.StructureByteStride = 0u;
+	// Give the subresource structure
+	constantData.pSysMem = &matrixTransform;
+
+	// Create the index buffer.
+	result = device->CreateBuffer(&constantBufferDesc, &constantData, &m_constantBuffer);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	m_deviceContext->VSSetConstantBuffers(0u, 1u, &m_constantBuffer);
 	// Release the arrays now that the vertex and index buffers have been created and loaded.
 	delete[] vertices;
 	vertices = 0;
@@ -175,14 +203,20 @@ void ModelClass::ShutdownBuffers()
 	if (m_indexBuffer)
 	{
 		m_indexBuffer->Release();
-		m_indexBuffer = 0;
+		m_indexBuffer = nullptr;
 	}
 
 	// Release the vertex buffer.
 	if (m_vertexBuffer)
 	{
 		m_vertexBuffer->Release();
-		m_vertexBuffer = 0;
+		m_vertexBuffer = nullptr;
+	}
+
+	if (m_constantBuffer)
+	{
+		m_constantBuffer->Release();
+		m_constantBuffer = nullptr;
 	}
 
 	return;
