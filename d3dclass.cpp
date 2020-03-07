@@ -41,11 +41,12 @@ bool D3DClass::Initialize(
 	D3D_FEATURE_LEVEL featureLevel;
 
 
-	D3D11_TEXTURE2D_DESC depthBufferDesc;
+	
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+
 	D3D11_RASTERIZER_DESC rasterDesc;
 	float fieldOfView, screenAspect;
+
 
 	// Find needed driver types and feature levels
 	D3D_DRIVER_TYPE driverTypes[] =
@@ -131,10 +132,8 @@ bool D3DClass::Initialize(
 	pBackBuffer = nullptr;
 
 
-
-
-
-	// Initialize the description of the depth buffer.
+	// CREATE DEPTH BUFFER
+	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
 	// Set up the description of the depth buffer.
@@ -149,8 +148,6 @@ bool D3DClass::Initialize(
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthBufferDesc.CPUAccessFlags = 0;
 	depthBufferDesc.MiscFlags = 0;
-
-
 	// Create the texture for the depth buffer using the filled out description.
 	result = m_device->CreateTexture2D(&depthBufferDesc, NULL, &m_depthStencilBuffer);
 	if (FAILED(result))
@@ -159,9 +156,41 @@ bool D3DClass::Initialize(
 	}
 
 	// Initialize the description of the stencil state.
-	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+	// (сам объект буфера глубин)
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	// Initialize the depth stencil view.
+	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+	// Set up the depth stencil view description.
+	depthStencilViewDesc.Format = depthBufferDesc.Format;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.Texture2D.MipSlice = 0;
+	// Create the depth stencil view.
+	result = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
+	if (FAILED(result))
+	{
+		return false;
+	}
+	// BIND THINGS TO THE OUTPUT
+	// Bind the render target view and depth stencil buffer to the output render pipeline.
+	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
-	// Set up the description of the stencil state.
+	// SETUP VIEWPORT (масштаб и система координат)
+	D3D11_VIEWPORT viewport;
+	viewport.Width = (float)screenWidth;
+	viewport.Height = (float)screenHeight;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+
+	// Create the viewport.
+	m_deviceContext->RSSetViewports(1, &viewport);
+
+
+
+
+
+
 	depthStencilDesc.DepthEnable = true;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
@@ -188,30 +217,8 @@ bool D3DClass::Initialize(
 	{
 		return false;
 	}
-
 	// Set the depth stencil state.
 	m_deviceContext->OMSetDepthStencilState(m_depthStencilState, 1);
-
-	// Initialize the depth stencil view.
-	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
-
-	// Set up the depth stencil view description.
-	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	depthStencilViewDesc.Texture2D.MipSlice = 0;
-
-	// Create the depth stencil view.
-	result = m_device->CreateDepthStencilView(m_depthStencilBuffer, &depthStencilViewDesc, &m_depthStencilView);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-
-	// BIND THINGS TO THE OUTPUT
-	// Bind the render target view and depth stencil buffer to the output render pipeline.
-	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
-
 	// Setup the raster description which will determine how and what polygons will be drawn.
 	rasterDesc.AntialiasedLineEnable = false;
 	rasterDesc.CullMode = D3D11_CULL_BACK;
@@ -224,30 +231,20 @@ bool D3DClass::Initialize(
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
+
 	// Create the rasterizer state from the description we just filled out.
-	// (поверхность рисования)
 	result = m_device->CreateRasterizerState(&rasterDesc, &m_rasterState);
 	if (FAILED(result))
 	{
 		return false;
 	}
-
 	// Now set the rasterizer state.
 	m_deviceContext->RSSetState(m_rasterState);
 
 
 
-	// SETUP VIEWPORT (масштаб и система координат)
-	D3D11_VIEWPORT viewport;
-	viewport.Width = (float)screenWidth;
-	viewport.Height = (float)screenHeight;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
+	
 
-	// Create the viewport.
-	m_deviceContext->RSSetViewports(1, &viewport);
 
 
 
