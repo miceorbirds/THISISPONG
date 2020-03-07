@@ -158,6 +158,7 @@
     <ClInclude Include="graphicsclass.h" />
     <ClInclude Include="inputclass.h" />
     <ClInclude Include="modelclass.h" />
+    <ClInclude Include="SolarSystem.h" />
     <ClInclude Include="systemclass.h" />
   </ItemGroup>
   <ItemGroup>

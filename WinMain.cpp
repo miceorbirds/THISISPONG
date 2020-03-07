@@ -3,30 +3,31 @@
 int WINAPI WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
-	PSTR pScmdline,
+	PSTR pCmdLine,
 	int iCmdshow)
+
 {
-	SystemClass* System = nullptr;
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(pCmdLine);
 	bool result;
 
-	// Create the system object.
-	System = new SystemClass;
-	if (!System)
+
+	auto app = std::make_unique<SystemClass>(800, 800, L"Solar System");
+	if (!app)
 	{
 		return 0;
 	}
 
 	// Initialize and run the system object.
-	result = System->Initialize();
+	result = app->Initialize();
 	if (result)
 	{
-		System->Run();
+		// if everything ok, show must begin
+		app->Run();
 	}
 
 	// Shutdown and release the system object.
-	System->Shutdown();
-	delete System;
-	System = nullptr;
+	app->Shutdown();
 
 	return 0;
 }

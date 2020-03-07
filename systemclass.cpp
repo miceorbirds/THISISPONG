@@ -1,7 +1,8 @@
 #include "systemclass.h"
 
 
-SystemClass::SystemClass()
+SystemClass::SystemClass(int width, int height, const wchar_t* name)
+	: clientAreaWidth(width), clientAreaHeight(height), m_applicationName(name)
 {
 	m_Input = nullptr;
 	m_Graphics = nullptr;
@@ -20,15 +21,10 @@ SystemClass::~SystemClass()
 
 bool SystemClass::Initialize()
 {
-	int screenWidth, screenHeight;
 	bool result;
 
-	// Initialize the width and height of the screen to zero before sending the variables into the function.
-	screenWidth = 0;
-	screenHeight = 0;
-
 	// Initialize the windows api.
-	InitializeWindows(screenWidth, screenHeight);
+	InitializeWindows(clientAreaWidth, clientAreaHeight);
 
 	// Create the input object. This object will be used to handle reading the keyboard input from the user.
 	m_Input = new InputClass;
@@ -47,7 +43,7 @@ bool SystemClass::Initialize()
 	}
 
 	// Initialize the graphics object.
-	result = m_Graphics->Initialize(screenWidth, screenHeight, m_hwnd);
+	result = m_Graphics->Initialize(clientAreaWidth, clientAreaHeight, m_hwnd);
 	if (!result)
 	{
 		return false;
@@ -172,20 +168,15 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 }
 
 
-void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
+void SystemClass::InitializeWindows()
 {
-	WNDCLASSEX wc;
-	int posX, posY;
-
+	WNDCLASSEX wc = {0};
 
 	// Get an external pointer to this object.	
 	ApplicationHandle = this;
 
 	// Get the instance of this application.
-	m_hinstance = GetModuleHandle(NULL);
-
-	// Give the application a name.
-	m_applicationName = L"PONG";
+	m_hinstance = GetModuleHandle(nullptr);
 
 	// Setup the windows class with default settings.
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
@@ -195,26 +186,22 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	wc.hInstance = m_hinstance;
 	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
 	wc.hIconSm = wc.hIcon;
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wc.hCursor = nullptr;
+	wc.hbrBackground = nullptr;
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = m_applicationName;
-	wc.cbSize = sizeof(WNDCLASSEX);
+	wc.cbSize = sizeof(wc);
 
 	// Register the window class.
 	RegisterClassEx(&wc);
 
-	// Determine the resolution of the clients desktop screen.
-	screenWidth = GetSystemMetrics(SM_CXSCREEN);
-	screenHeight = GetSystemMetrics(SM_CYSCREEN);
-
-	screenWidth = 800;
-	screenHeight = 800;
-
-	// Place the window in the middle of the screen.
-	posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
-	posY = (GetSystemMetrics(SM_CYSCREEN) - screenHeight) / 2;
-
+	// calculate window size based on desired client region size
+	RECT windowRect;
+	windowRect.left = 100;
+	windowRect.right = clientAreaWidth + windowRect.left;
+	windowRect.top = 100;
+	windowRect.bottom = clientAreaHeight + windowRect.top;
+	AdjustWindowRect(&windowRect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
 
 	// Create the window with the screen settings and get the handle to it.
 	m_hwnd = CreateWindowEx(
@@ -222,38 +209,31 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 		m_applicationName,
 		m_applicationName,
 		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-		posX, posY,
-		screenWidth, screenHeight,
+		CW_USEDEFAULT, CW_USEDEFAULT,
+		windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
 		nullptr, nullptr,
 		m_hinstance, nullptr);
 
 	// Bring the window up on the screen and set it as main focus.
-	ShowWindow(m_hwnd, SW_SHOW);
+	ShowWindow(m_hwnd, SW_SHOWDEFAULT);
 	SetForegroundWindow(m_hwnd);
 	SetFocus(m_hwnd);
-
-	return;
 }
 
 
 void SystemClass::ShutdownWindows()
 {
-	// Show the mouse cursor.
-	ShowCursor(true);
-
 
 	// Remove the window.
 	DestroyWindow(m_hwnd);
-	m_hwnd = NULL;
+	m_hwnd = nullptr;
 
 	// Remove the application instance.
 	UnregisterClass(m_applicationName, m_hinstance);
-	m_hinstance = NULL;
+	m_hinstance = nullptr;
 
 	// Release the pointer to this class.
-	ApplicationHandle = NULL;
-
-	return;
+	ApplicationHandle = nullptr;
 }
 
 
