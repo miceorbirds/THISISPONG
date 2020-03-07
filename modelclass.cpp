@@ -23,7 +23,7 @@ ModelClass::~ModelClass()
 }
 
 
-bool ModelClass::Initialize(ID3D11Device* device, wchar_t* modelFilename)
+bool ModelClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* context, wchar_t* modelFilename)
 {
 	bool result;
 
@@ -35,7 +35,7 @@ bool ModelClass::Initialize(ID3D11Device* device, wchar_t* modelFilename)
 	}
 
 	// Initialize the vertex and index buffers.
-	result = InitializeBuffers(device);
+	result = InitializeBuffers(device, context);
 	if (!result)
 	{
 		return false;
@@ -69,7 +69,7 @@ int ModelClass::GetIndexCount()
 }
 
 
-bool ModelClass::InitializeBuffers(ID3D11Device* device)
+bool ModelClass::InitializeBuffers(ID3D11Device* device, ID3D11DeviceContext* context)
 {
 	VertexType* vertices;
 	ConstantBufferType matrixTransform;
@@ -185,7 +185,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		return false;
 	}
 
-	m_deviceContext->VSSetConstantBuffers(0u, 1u, &m_constantBuffer);
+	context->VSSetConstantBuffers(0u, 1u, &m_constantBuffer);
 	// Release the arrays now that the vertex and index buffers have been created and loaded.
 	delete[] vertices;
 	vertices = 0;

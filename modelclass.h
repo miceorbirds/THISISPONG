@@ -42,14 +42,14 @@ public:
 	ModelClass(const ModelClass&);
 	~ModelClass();
 
-	bool Initialize(ID3D11Device*, wchar_t*);
+	bool Initialize(ID3D11Device*, ID3D11DeviceContext* context, wchar_t*);
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
 	int GetIndexCount();
 
 private:
-	bool InitializeBuffers(ID3D11Device*);
+	bool InitializeBuffers(ID3D11Device*, ID3D11DeviceContext*);
 	void ShutdownBuffers();
 	void RenderBuffers(ID3D11DeviceContext*);
 
