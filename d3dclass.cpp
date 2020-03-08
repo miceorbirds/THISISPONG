@@ -25,29 +25,20 @@ D3DClass::~D3DClass()
 
 
 bool D3DClass::Initialize(
-	int screenWidth,
-	int screenHeight, bool vsync,
-	HWND hwnd, bool fullscreen,
+	int screenWidth, int screenHeight,
+	HWND hwnd,
 	float screenDepth, float screenNear)
 {
 	HRESULT result;
-
-	unsigned long long stringLength;
-	DXGI_MODE_DESC* displayModeList;
-	DXGI_ADAPTER_DESC adapterDesc;
 	int error;
 
-	D3D_DRIVER_TYPE driverType;
-	D3D_FEATURE_LEVEL featureLevel;
 
-
-	
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-
 	D3D11_RASTERIZER_DESC rasterDesc;
 	float fieldOfView, screenAspect;
 
 
+	D3D_DRIVER_TYPE driverType;
 	// Find needed driver types and feature levels
 	D3D_DRIVER_TYPE driverTypes[] =
 	{
@@ -55,12 +46,13 @@ bool D3DClass::Initialize(
 	};
 	unsigned int totalDriverTypes = ARRAYSIZE(driverTypes);
 
+	D3D_FEATURE_LEVEL featureLevel;
 	D3D_FEATURE_LEVEL featureLevels[] =
 	{
 	D3D_FEATURE_LEVEL_11_1,
 	D3D_FEATURE_LEVEL_11_0,
 	D3D_FEATURE_LEVEL_10_1,
-	D3D_FEATURE_LEVEL_10_0
+	D3D_FEATURE_LEVEL_10_0,
 	};
 	unsigned int totalFeatureLevels = ARRAYSIZE(featureLevels);
 
@@ -69,7 +61,6 @@ bool D3DClass::Initialize(
 #ifdef _DEBUG
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-
 
 	// SWAP CHAIN DESCRIPTION
 	// Initialize the swap chain description.
@@ -131,7 +122,6 @@ bool D3DClass::Initialize(
 	pBackBuffer->Release();
 	pBackBuffer = nullptr;
 
-
 	// CREATE DEPTH BUFFER
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
@@ -158,9 +148,7 @@ bool D3DClass::Initialize(
 	// Initialize the description of the stencil state.
 	// (сам объект буфера глубин)
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
-	// Initialize the depth stencil view.
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
-	// Set up the depth stencil view description.
 	depthStencilViewDesc.Format = depthBufferDesc.Format;
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;

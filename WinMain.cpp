@@ -11,7 +11,6 @@ int WINAPI WinMain(
 	UNREFERENCED_PARAMETER(pCmdLine);
 	bool result;
 
-
 	auto app = std::make_unique<SystemClass>(800, 800, L"Solar System");
 	if (!app)
 	{
