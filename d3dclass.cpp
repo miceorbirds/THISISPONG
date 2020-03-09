@@ -125,7 +125,6 @@ bool D3DClass::Initialize(
 	// CREATE DEPTH BUFFER
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
-
 	// Set up the description of the depth buffer.
 	depthBufferDesc.Width = screenWidth;
 	depthBufferDesc.Height = screenHeight;
@@ -158,6 +157,7 @@ bool D3DClass::Initialize(
 	{
 		return false;
 	}
+
 	// BIND THINGS TO THE OUTPUT
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
 	m_deviceContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
@@ -170,7 +170,6 @@ bool D3DClass::Initialize(
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
-
 	// Create the viewport.
 	m_deviceContext->RSSetViewports(1, &viewport);
 

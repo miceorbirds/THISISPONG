@@ -160,6 +160,7 @@
     <ClInclude Include="modelclass.h" />
     <ClInclude Include="SolarSystem.h" />
     <ClInclude Include="systemclass.h" />
+    <ClInclude Include="Win32Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.ps" />

@@ -3,10 +3,10 @@
 
 GraphicsClass::GraphicsClass()
 {
-	m_Direct3D = 0;
-	m_Camera = 0;
-	m_Model = 0;
-	m_ColorShader = 0;
+	m_Direct3D = nullptr;
+	m_Camera = nullptr;
+	m_Model = nullptr;
+	m_ColorShader = nullptr;
 }
 
 
@@ -56,7 +56,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	wchar_t* modelFile = const_cast<wchar_t*>(L"triangle.txt");
+	wchar_t* modelFile = const_cast<wchar_t*>(L"cube.txt");
 	
 	// Initialize the model object.
 	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), modelFile);
@@ -130,7 +130,7 @@ bool GraphicsClass::Frame()
 
 
 	// Update the rotation variable each frame.
-	rotation += (float)XM_PI * 0.01f;
+	rotation += (float)XM_PI * 0.0125f;
 	if (rotation > 360.0f)
 	{
 		rotation -= 360.0f;

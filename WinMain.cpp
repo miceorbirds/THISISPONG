@@ -1,11 +1,10 @@
 #include "systemclass.h"
 
-int WINAPI WinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	PSTR pCmdLine,
-	int iCmdshow)
-
+//------------------------------------------------------------------------------------
+// Точка входа в программу. Инициализация всех объектов и вход в цикл сообщений.
+// Свободное время используется для отрисовки сцены.
+//------------------------------------------------------------------------------------
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, int iCmdshow)
 {
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(pCmdLine);
