@@ -151,7 +151,7 @@ bool GraphicsClass::Render(float rotation)
 	bool result;
 
 	// Clear the buffers to begin the scene.
-	m_Direct3D->BeginScene(1.0f, 0.0f, 0.0f, 1.0f);
+	m_Direct3D->BeginScene(0.282352954f, 0.239215702f, 0.545098066f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render(); 
@@ -160,6 +160,7 @@ bool GraphicsClass::Render(float rotation)
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
+
 	// Rotate the world matrix by the rotation value so that the triangle will spin.
 	worldMatrix = XMMatrixRotationY(rotation);
 

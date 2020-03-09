@@ -43,6 +43,7 @@ private:
 	void RenderBuffers(ID3D11DeviceContext*);
 
 	bool LoadModel(wchar_t*);
+	bool SetModel();
 	void ReleaseModel();
 
 private:
