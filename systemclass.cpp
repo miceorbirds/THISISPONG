@@ -32,8 +32,8 @@ bool SystemClass::Initialize()
 	{
 		return false;
 	}
-	// Initialize the input object.
 	m_Input->Initialize();
+
 
 	// Create the graphics object. This object will handle rendering all the graphics for this application.
 	m_Graphics = new GraphicsClass;
@@ -41,8 +41,6 @@ bool SystemClass::Initialize()
 	{
 		return false;
 	}
-
-	// Initialize the graphics object.
 	result = m_Graphics->Initialize(clientAreaWidth, clientAreaHeight, m_hwnd);
 	if (!result)
 	{
@@ -120,7 +118,6 @@ void SystemClass::Run()
 bool SystemClass::Frame()
 {
 	bool result;
-
 
 	// Check if the user pressed escape and wants to exit the application.
 	if (m_Input->IsKeyDown(VK_ESCAPE))

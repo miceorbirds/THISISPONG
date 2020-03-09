@@ -232,7 +232,6 @@ bool ModelClass::LoadModel(wchar_t* filename)
 	char input;
 	int i;
 
-
 	// Open the model file.
 	fin.open(filename);
 
