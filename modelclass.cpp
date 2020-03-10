@@ -229,8 +229,6 @@ void ModelClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	return;
 }
 
 bool ModelClass::LoadModel(wchar_t* filename)
@@ -238,7 +236,6 @@ bool ModelClass::LoadModel(wchar_t* filename)
 	ifstream fin;
 	char input;
 	int i;
-
 
 	// Open the model file.
 	fin.open(filename);
