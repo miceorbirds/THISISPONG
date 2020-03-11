@@ -71,8 +71,18 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device, ID3D11DeviceContext* co
 	HRESULT result;
 	int i;
 
-	VertexType* vertices;
-	//ConstantBufferType matrixTransform;
+	VertexType* vertices[] = {};
+	vertices = {
+		{XMFLOAT3(-1, -1, -1), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)},
+		{XMFLOAT3(-1, +1, -1), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)},
+		{XMFLOAT3(+1, +1, -1), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)},
+		{XMFLOAT3(+1, -1, -1), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)},
+		{XMFLOAT3(-1, -1, +1), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)},
+		{XMFLOAT3(-1, +1, +1), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)},
+		{XMFLOAT3(+1, +1, +1), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)},
+		{XMFLOAT3(+1, -1, +1), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f)}
+	};
+	ConstantBufferType matrixTransform;
 	m_indexCount = 6;
 	int indices[] = { 0,1,2, 2,3,0 };
 
@@ -114,15 +124,15 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device, ID3D11DeviceContext* co
 	//	return false;
 	//}
 
-	//matrixTransform =
-	//{
-	//	{
-	//		XMMatrixTranspose(
-	//			XMMatrixScaling(2.0f,1.0f,1.0f) *
-	//			XMMatrixTranslation(0.15f,0.0f,0.0f)
-	//		)
-	//	}
-	//};
+	matrixTransform =
+	{
+		{
+			XMMatrixTranspose(
+				XMMatrixScaling(2.0f,1.0f,1.0f) *
+				XMMatrixTranslation(0.15f,0.0f,0.0f)
+			)
+		}
+	};
 
 	// Load the vertex array with data.
 	//for (i = 0; i < m_vertexCount; ++i)
